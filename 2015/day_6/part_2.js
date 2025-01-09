@@ -6,7 +6,6 @@ readFile("./input.txt", "utf-8", (err, data) => {
     return;
   }
   const arr = data.split("\r\n");
-  // const grid = new Set();
   const grid = {};
 
   let indicators = {
