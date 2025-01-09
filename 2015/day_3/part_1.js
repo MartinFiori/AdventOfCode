@@ -8,27 +8,31 @@ readFile("./input.txt", 'utf-8', (err, data) => {
         console.log(err);
         return;
     }
-    const location = {
-        col: 0,
-        row: 0
+    const visitedHouses = new Set();
+    let x = 0, y = 0;
+
+    // Start by marking the starting location as visited
+    visitedHouses.add(`${x},${y}`);
+
+    // Process each direction in the string
+    for (const direction of data) {
+        switch (direction) {
+            case '^':
+                y += 1; // Move north
+                break;
+            case 'v':
+                y -= 1; // Move south
+                break;
+            case '>':
+                x += 1; // Move east
+                break;
+            case '<':
+                x -= 1; // Move west
+                break;
+        }
+        visitedHouses.add(`${x},${y}`); // Mark the new location as visited
     }
-    const { col, row } = location;
-    const moves = {
-        "0-0": 1
-    }
-    const obj = {
-        "v": () => location.col++,
-        ">": () => location.row++,
-        "^": () => location.col--,
-        "<": () => location.row--,
-    }
-    for (const dir of data) {
-        obj[dir]()
-        // console.log(location);
-        const currValue = location.col.toString() + '-' + location.row.toString()
-        console.log(currValue);
-        if (!moves[currValue]) moves[currValue] = 0
-        moves[currValue]++;
-    }
-    console.log("Visitaron un total de: ", Object.values(moves).length);
+
+    // The number of unique houses visited is the size of the Set
+    console.log(visitedHouses.size);
 });
