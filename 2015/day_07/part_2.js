@@ -44,21 +44,23 @@ readFile("./input.txt", "utf-8", (err, data) => {
       result = evaluate(x, circuit, cache) >> parseInt(n, 10);
     } else if (/NOT/.test(expr)) {
       const x = expr.split("NOT ")[1];
-      result = ~evaluate(x, circuit, cache) & 0xffff; // Máscara de 16 bits
+      result = ~evaluate(x, circuit, cache) & 0xffff;
     } else {
-      console.log(expr);
       result = evaluate(expr, circuit, cache); // Asignación directa
     }
 
     cache[wire] = result; // Guardar en caché
     return result;
   }
-  // Simular el circuito
+
   const circuit = parseInstructions(instructions);
-  const cache = {};
-  const result = evaluate("fs", circuit, cache); // Cambia "a" por el cable deseado
+  let cache = {};
+  const signalA = evaluate("a", circuit, cache);
+  console.log("Señal en el cable 'a' (parte 1):", signalA);
 
-  console.log("Señal en el cable 'lx':", result);
-
-  console.log(result);
+  // Parte 2: Sobrescribir 'b' con el valor de 'a' y recalcular
+  circuit["b"] = signalA; // Sobrescribir b con el valor de a
+  cache = {}; // Reiniciar el caché
+  const newSignalA = evaluate("a", circuit, cache);
+  console.log("Nueva señal en el cable 'a' (parte 2):", newSignalA);
 });

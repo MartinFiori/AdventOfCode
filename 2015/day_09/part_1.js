@@ -12,7 +12,6 @@ function parseInput(data) {
   for (const instruction of instructions) {
     const [from, , to, , distance] = instruction.split(" ");
     const dist = parseInt(distance, 10);
-
     if (!graph[from]) graph[from] = {};
     if (!graph[to]) graph[to] = {};
 
@@ -40,10 +39,11 @@ function findShortestRouteRecursive(
   minDistance,
 ) {
   if (visited.size === Object.keys(graph).length) {
-    return Math.min(minDistance, currentDistance); // Return shortest route found
+    return Math.max(minDistance, currentDistance); // Return shortest route found
   }
 
   for (const neighbor in graph[current]) {
+    // console.log(neighbor)
     if (!visited.has(neighbor)) {
       visited.add(neighbor);
       minDistance = findShortestRouteRecursive(
@@ -66,7 +66,7 @@ function findShortestRouteRecursive(
  * @returns {number} - The shortest route distance.
  */
 function findShortestRoute(graph) {
-  let minDistance = Infinity;
+  let minDistance = -Infinity;
   const cities = Object.keys(graph);
 
   for (const startCity of cities) {
